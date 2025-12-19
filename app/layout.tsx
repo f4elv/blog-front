@@ -1,3 +1,4 @@
+import Header from "./components/Header";
 import "./globals.css";
 import { JetBrains_Mono } from "next/font/google";
 
@@ -5,7 +6,7 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrainsmono",
   display: "swap",
-  weight: ["400", "700"],
+  weight: ["400", "700", "800"],
 });
 
 export default function RootLayout({
@@ -15,7 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={jetBrainsMono.className}>
-      <body className="bg-neutral-100">{children}</body>
+      <body className="bg-neutral-100">
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
