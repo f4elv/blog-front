@@ -13,6 +13,12 @@ export default function Page() {
   async function handleSave() {
     if (!editor) return;
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Você precisa estar logado para postar.");
+      return;
+    }
+
     const payload = {
       title,
       content: editor.getJSON(),
@@ -20,9 +26,12 @@ export default function Page() {
 
     setLoading(true);
 
-    await fetch("/api/posts", {
+    await fetch("http://localhost:3333/api/posts", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(payload),
     });
 

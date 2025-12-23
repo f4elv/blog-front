@@ -11,14 +11,16 @@ const jetBrainsMono = JetBrains_Mono({
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="pt-BR" className={jetBrainsMono.className}>
-      <body className="bg-neutral-100">
+      <body className="bg-neutral-100 h-screen flex flex-col">
         <Header />
-        {children}
+        <main className="flex-1 flex items-center justify-center">
+          {children}
+        </main>
       </body>
     </html>
   );
