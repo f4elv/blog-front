@@ -20,7 +20,7 @@ export default function writerLoginPage() {
 
       await writerLogin({ password });
 
-      router.push("/writer/write");
+      router.push("/writer/dashboard");
     } catch (err) {
       if (err instanceof ZodError) {
         setError(err.issues[0].message);
@@ -38,7 +38,10 @@ export default function writerLoginPage() {
   };
 
   return (
-    <section className="w-full max-w-sm p-6 rounded-xl border border-red-800 flex flex-col gap-4 items-center">
+    <form
+      action={handleLogin}
+      className="max-w-2xl mx-auto mt-24 p-6 rounded-md border border-red-800 flex flex-col gap-4 items-center"
+    >
       <h1 className="text-4xl font-extrabold mb-4">Só a boa mano</h1>
 
       <input
@@ -47,19 +50,14 @@ export default function writerLoginPage() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         disabled={loading}
-        className="w-full px-4 py-2 border border-red-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+        className="w-full px-4 py-2 border border-red-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-center"
       />
 
-      <Button
-        variant="primary"
-        onClick={handleLogin}
-        disabled={loading}
-        className="w-full"
-      >
+      <Button variant="primary" disabled={loading} className="w-full">
         {loading ? "Entrando..." : "Entrar"}
       </Button>
 
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-    </section>
+    </form>
   );
 }

@@ -26,6 +26,7 @@ export async function fetcher(
 
     if (token) {
       finalHeaders.Authorization = `Bearer ${token}`;
+      console.log(token);
     }
   }
 

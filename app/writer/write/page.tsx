@@ -4,6 +4,8 @@ import { useState } from "react";
 import EditorJS from "../../components/tiptap/Editor";
 import { Editor } from "@tiptap/react";
 import { Button } from "@/app/components/Button";
+import { createPost } from "@/app/lib/api/post";
+import { postSchema } from "@/app/lib/schemas/post";
 
 export default function Page() {
   const [title, setTitle] = useState("");
@@ -13,29 +15,27 @@ export default function Page() {
   async function handleSave() {
     if (!editor) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Você precisa estar logado para postar.");
-      return;
+    try {
+      setLoading(true);
+
+      const content = editor.getHTML();
+
+      const post = postSchema.parse({
+        title,
+        content,
+      });
+
+      await createPost(post);
+
+      setTitle("");
+      editor.commands.clearContent();
+      alert(`Post ${title} criado com sucesso`);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao criar post");
+    } finally {
+      setLoading(false);
     }
-
-    const payload = {
-      title,
-      content: editor.getJSON(),
-    };
-
-    setLoading(true);
-
-    await fetch("http://localhost:3333/api/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    setLoading(false);
   }
 
   return (
