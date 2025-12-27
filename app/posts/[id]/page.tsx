@@ -5,8 +5,9 @@ import { useParams, useRouter } from "next/navigation";
 import { getPostById, deletePost } from "@/app/lib/api/post";
 import { tokenStorage } from "@/app/lib/helpers/token";
 import { Button } from "@/app/components/Button";
+import { CommentSection } from "@/app/components/commentSection";
 import hljs from "highlight.js";
-import "@/app/components/tiptap/style.css"; // seu CSS
+import "@/app/components/tiptap/style.css";
 
 type Comment = {
   id: string;
@@ -18,7 +19,7 @@ type Comment = {
 type Post = {
   id: string;
   title: string;
-  content: string; // HTML
+  content: string;
   createdAt: string;
   comments: Comment[];
 };
@@ -34,7 +35,6 @@ export default function PostPage() {
     getPostById(id).then(setPost);
   }, [id]);
 
-  // Aplica syntax highlighting no código
   useEffect(() => {
     const blocks = document.querySelectorAll("pre code");
     blocks.forEach((block) => hljs.highlightElement(block as HTMLElement));
@@ -43,7 +43,7 @@ export default function PostPage() {
   if (!post) return <p>Carregando...</p>;
 
   return (
-    <article className="max-w-3xl mx-auto py-10 flex flex-col gap-6">
+    <article className="max-w-5xl mx-auto py-10 flex flex-col gap-6">
       {isWriter && (
         <div className="flex justify-end gap-2">
           <Button onClick={() => router.push(`/writer/edit/${id}`)}>
@@ -62,14 +62,13 @@ export default function PostPage() {
         </div>
       )}
 
-      <h1 className="text-4xl font-bold">{post.title}</h1>
+      <h1 className="text-4xl font-bold text-center">{post.title}</h1>
 
       <div
         className="tiptap"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
-      {/* Opcional: exibir comentários */}
       {post.comments.length > 0 && (
         <section className="mt-10 border-t pt-4">
           <h2 className="text-2xl font-semibold mb-4">Comentários</h2>
@@ -86,6 +85,12 @@ export default function PostPage() {
           ))}
         </section>
       )}
+      <CommentSection
+        postId={post.id}
+        onCommentCreated={() => {
+          getPostById(id).then(setPost);
+        }}
+      />
     </article>
   );
 }

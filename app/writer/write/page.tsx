@@ -6,11 +6,13 @@ import { Editor } from "@tiptap/react";
 import { Button } from "@/app/components/Button";
 import { createPost } from "@/app/lib/api/post";
 import { postSchema } from "@/app/lib/schemas/post";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [title, setTitle] = useState("");
   const [editor, setEditor] = useState<Editor | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleSave() {
     if (!editor) return;
@@ -40,6 +42,13 @@ export default function Page() {
 
   return (
     <div className="py-10 max-w-5xl mx-auto">
+      <Button
+        variant="primary"
+        className="mb-4"
+        onClick={() => router.push("/writer/dashboard")}
+      >
+        Voltar
+      </Button>
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}

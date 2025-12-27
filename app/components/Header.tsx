@@ -34,7 +34,7 @@ export default function Header() {
         transition-transform duration-300
         ${hide ? "-translate-y-full" : "translate-y-0"}`}
     >
-      <div className="max-w-5xl mx-auto py-6 flex items-center justify-between">
+      <div className="max-w-5xl mx-auto px-4 md:px-0 py-6 flex items-center justify-between">
         <h1 className="text-2xl font-extrabold tracking-wide">Xovem Blog</h1>
 
         <nav className="hidden md:flex space-x-8 font-medium text-md">

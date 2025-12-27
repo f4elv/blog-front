@@ -16,9 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className={jetBrainsMono.className}>
-      <body className="bg-neutral-100 h-screen flex flex-col overflow-hidden">
+      <body className="bg-neutral-100 min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 overflow-auto">{children}</main>
+        <main className="flex-1 ">{children}</main>
       </body>
     </html>
   );
