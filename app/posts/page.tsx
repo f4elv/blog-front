@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getPost } from "@/app/lib/api/post";
 import { PostList } from "@/app/components/PostList";
 
-export default function PostsPage() {
+export default function Page() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {

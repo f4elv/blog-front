@@ -17,13 +17,13 @@ type Props = {
 
 export function PostList({ posts, showActions, onEdit }: Props) {
   return (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-col gap-2 max-w-5xl">
       {posts.map((post) => (
         <li
           key={post.id}
-          className="flex justify-between items-center p-4 rounded hover:bg-neutral-100"
+          className="inline-flex justify-between items-center py-4 px-2 rounded-md hover:bg-red-100 cursor-pointer "
         >
-          <Link href={`/posts/${post.id}`} className="font-medium">
+          <Link href={`/posts/${post.id}`} className=" text-">
             {post.title}
           </Link>
 
