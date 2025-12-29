@@ -35,13 +35,22 @@ export default function Header() {
         ${hide ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="max-w-5xl mx-auto px-4 md:px-0 py-6 flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold tracking-wide">Xovem Blog</h1>
+        <a
+          href="/"
+          className="text-2xl font-extrabold tracking-wide text-red-800"
+        >
+          Rossin Blog
+        </a>
 
         <nav className="hidden md:flex space-x-8 font-medium text-md">
           <a href="/sobre" className="hover:text-red-800 transition">
             Sobre
           </a>
-          <a href="/contato" className="hover:text-red-800 transition">
+          <a
+            href="https://www.linkedin.com/in/rafaelvasconcelos33/"
+            target="blank"
+            className="hover:text-red-800 transition"
+          >
             Contato
           </a>
         </nav>
@@ -63,7 +72,11 @@ export default function Header() {
             <a href="/sobre" onClick={() => setOpen(false)}>
               Sobre
             </a>
-            <a href="/contato" onClick={() => setOpen(false)}>
+            <a
+              href="https://www.linkedin.com/in/rafaelvasconcelos33/"
+              target="blank"
+              onClick={() => setOpen(false)}
+            >
               Contato
             </a>
           </nav>

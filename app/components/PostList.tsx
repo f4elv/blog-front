@@ -21,7 +21,7 @@ export function PostList({ posts, showActions, onEdit }: Props) {
       {posts.map((post) => (
         <li
           key={post.id}
-          className="inline-flex justify-between items-center py-4 px-2 rounded-md hover:bg-red-100 cursor-pointer "
+          className="flex justify-between items-center py-4 px-2 cursor-pointer underline decoration-red-800"
         >
           <Link href={`/posts/${post.id}`} className=" text-">
             {post.title}
