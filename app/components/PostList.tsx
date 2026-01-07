@@ -1,4 +1,3 @@
-// components/PostList.tsx
 "use client";
 
 import Link from "next/link";
@@ -15,22 +14,27 @@ type Props = {
   onEdit?: (id: string) => void;
 };
 
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("pt-BR");
+}
+
 export function PostList({ posts, showActions, onEdit }: Props) {
   return (
-    <ul className="flex flex-col gap-2 max-w-5xl">
+    <ul className="flex flex-col gap-4 px-4 md:px-0 max-w-5xl mx-auto">
       {posts.map((post) => (
-        <li
-          key={post.id}
-          className="flex justify-between items-center py-4 px-2 cursor-pointer underline decoration-red-800"
-        >
-          <Link href={`/posts/${post.id}`} className=" text-">
-            {post.title}
+        <li key={post.id} className="w-full">
+          <Link
+            href={`/posts/${post.id}`}
+            className="flex w-full items-baseline justify-between underline decoration-red-800"
+          >
+            <span className="text-xl">{post.title}</span>
+            <span className="text-sm">{formatDate(post.createdAt)}</span>
           </Link>
 
           {showActions && (
             <button
               onClick={() => onEdit?.(post.id)}
-              className="text-sm text-red-700 hover:underline"
+              className="ml-4 text-sm text-red-700 hover:underline shrink-0"
             >
               Editar
             </button>

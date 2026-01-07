@@ -29,7 +29,6 @@ export default function Header() {
     <header
       className={`sticky top-0 z-50
         bg-white/70 backdrop-blur-md
-        border-b border-neutral-200
         shadow-lg
         transition-transform duration-300
         ${hide ? "-translate-y-full" : "translate-y-0"}`}
