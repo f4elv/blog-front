@@ -20,9 +20,12 @@ function formatDate(dateString: string) {
 
 export function PostList({ posts, showActions, onEdit }: Props) {
   return (
-    <ul className="flex flex-col gap-4 px-4 md:px-0 max-w-5xl mx-auto">
+    <ul className="flex flex-col gap-4 px-4 md:px-0 max-w-5xl w-full mx-auto">
       {posts.map((post) => (
-        <li key={post.id} className="w-full">
+        <li
+          key={post.id}
+          className="w-full flex items-baseline justify-between"
+        >
           <Link
             href={`/posts/${post.id}`}
             className="flex w-full items-baseline justify-between underline decoration-red-800"

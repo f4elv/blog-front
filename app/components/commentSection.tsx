@@ -4,6 +4,10 @@ import { useState } from "react";
 import { Button } from "@/app/components/Button";
 import { createComment } from "@/app/lib/api/comment";
 import { createSignature } from "@/app/lib/api/signature";
+import {
+  parseFieldErrors,
+  FieldErrors,
+} from "@/app/lib/helpers/parseFieldErrors";
 
 type Mode = "idle" | "sign" | "create";
 
@@ -21,13 +25,28 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  function inputClass(hasError?: boolean) {
+    return `
+      w-full border rounded p-2 outline-none transition
+      ${
+        hasError
+          ? "border-red-500 focus:ring-1 focus:ring-red-400"
+          : "border-gray-300"
+      }
+    `;
+  }
 
   async function handleCreateSignature() {
-    setError(null);
+    setSubmitted(true);
+    setFieldErrors({});
 
     if (signaturePassword !== confirmPassword) {
-      setError("As senhas não conferem");
+      setFieldErrors({
+        confirmPassword: "As senhas não conferem",
+      });
       return;
     }
 
@@ -39,16 +58,18 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
         password: signaturePassword,
       });
 
+      setSubmitted(false);
       setMode("sign");
-    } catch (err: any) {
-      setError(err.message ?? "Erro ao criar assinatura");
+    } catch (err) {
+      setFieldErrors(parseFieldErrors(err));
     } finally {
       setLoading(false);
     }
   }
 
   async function handleCreateComment() {
-    setError(null);
+    setSubmitted(true);
+    setFieldErrors({});
 
     try {
       setLoading(true);
@@ -59,13 +80,14 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
         signaturePassword,
       });
 
+      setSubmitted(false);
       setContent("");
       setSignaturePassword("");
       setMode("idle");
 
       onCommentCreated?.();
-    } catch (err: any) {
-      setError(err.message ?? "Erro ao enviar comentário");
+    } catch (err) {
+      setFieldErrors(parseFieldErrors(err));
     } finally {
       setLoading(false);
     }
@@ -75,12 +97,26 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
     <section className="mt-12 border-t pt-6 flex flex-col gap-4">
       <h2 className="text-2xl font-semibold">Comentário</h2>
 
-      <textarea
-        className="border rounded p-3 min-h-30"
-        placeholder="Escreva seu comentário..."
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
+      {/* Comentário */}
+      <div>
+        <textarea
+          className={`
+            w-full border rounded p-3 min-h-32 outline-none transition
+            ${
+              submitted && fieldErrors.content
+                ? "border-red-500 focus:ring-1 focus:ring-red-400"
+                : "border-gray-300"
+            }
+          `}
+          placeholder="Escreva seu comentário..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+
+        {submitted && fieldErrors.content && (
+          <p className="text-red-600 text-xs mt-1">{fieldErrors.content}</p>
+        )}
+      </div>
 
       {mode === "idle" && (
         <Button onClick={() => setMode("sign")}>Assinar comentário</Button>
@@ -88,20 +124,40 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
 
       {mode === "sign" && (
         <>
-          <input
-            className="border rounded p-2"
-            placeholder="Assinatura"
-            value={signatureName}
-            onChange={(e) => setSignatureName(e.target.value)}
-          />
+          {/* Assinatura */}
+          <div>
+            <input
+              className={inputClass(submitted && !!fieldErrors.signatureName)}
+              placeholder="Assinatura"
+              value={signatureName}
+              onChange={(e) => setSignatureName(e.target.value)}
+            />
 
-          <input
-            type="password"
-            className="border rounded p-2"
-            placeholder="Senha"
-            value={signaturePassword}
-            onChange={(e) => setSignaturePassword(e.target.value)}
-          />
+            {submitted && fieldErrors.signatureName && (
+              <p className="text-red-600 text-xs mt-1">
+                {fieldErrors.signatureName}
+              </p>
+            )}
+          </div>
+
+          {/* Senha */}
+          <div>
+            <input
+              type="password"
+              className={inputClass(
+                submitted && !!fieldErrors.signaturePassword
+              )}
+              placeholder="Senha"
+              value={signaturePassword}
+              onChange={(e) => setSignaturePassword(e.target.value)}
+            />
+
+            {submitted && fieldErrors.signaturePassword && (
+              <p className="text-red-600 text-xs mt-1">
+                {fieldErrors.signaturePassword}
+              </p>
+            )}
+          </div>
 
           <div className="flex gap-3">
             <Button onClick={handleCreateComment} disabled={loading}>
@@ -109,7 +165,12 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
             </Button>
 
             <button
-              onClick={() => setMode("create")}
+              type="button"
+              onClick={() => {
+                setSubmitted(false);
+                setFieldErrors({});
+                setMode("create");
+              }}
               className="text-sm underline"
             >
               Criar assinatura
@@ -120,28 +181,57 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
 
       {mode === "create" && (
         <>
-          <input
-            className="border rounded p-2"
-            placeholder="Nome da assinatura"
-            value={signatureName}
-            onChange={(e) => setSignatureName(e.target.value)}
-          />
+          {/* Nome da assinatura */}
+          <div>
+            <input
+              className={inputClass(submitted && !!fieldErrors.signatureName)}
+              placeholder="Nome da assinatura"
+              value={signatureName}
+              onChange={(e) => setSignatureName(e.target.value)}
+            />
 
-          <input
-            type="password"
-            className="border rounded p-2"
-            placeholder="Senha"
-            value={signaturePassword}
-            onChange={(e) => setSignaturePassword(e.target.value)}
-          />
+            {submitted && fieldErrors.signatureName && (
+              <p className="text-red-600 text-xs mt-1">
+                {fieldErrors.signatureName}
+              </p>
+            )}
+          </div>
 
-          <input
-            type="password"
-            className="border rounded p-2"
-            placeholder="Confirmar senha"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+          {/* Senha */}
+          <div>
+            <input
+              type="password"
+              className={inputClass(
+                submitted && !!fieldErrors.signaturePassword
+              )}
+              placeholder="Senha"
+              value={signaturePassword}
+              onChange={(e) => setSignaturePassword(e.target.value)}
+            />
+
+            {submitted && fieldErrors.signaturePassword && (
+              <p className="text-red-600 text-xs mt-1">
+                {fieldErrors.signaturePassword}
+              </p>
+            )}
+          </div>
+
+          {/* Confirmar senha */}
+          <div>
+            <input
+              type="password"
+              className={inputClass(submitted && !!fieldErrors.confirmPassword)}
+              placeholder="Confirmar senha"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+
+            {submitted && fieldErrors.confirmPassword && (
+              <p className="text-red-600 text-xs mt-1">
+                {fieldErrors.confirmPassword}
+              </p>
+            )}
+          </div>
 
           <div className="flex gap-3">
             <Button onClick={handleCreateSignature} disabled={loading}>
@@ -149,7 +239,12 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
             </Button>
 
             <button
-              onClick={() => setMode("sign")}
+              type="button"
+              onClick={() => {
+                setSubmitted(false);
+                setFieldErrors({});
+                setMode("sign");
+              }}
               className="text-sm underline"
             >
               Já tenho assinatura
@@ -157,8 +252,6 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
           </div>
         </>
       )}
-
-      {error && <p className="text-red-600 text-sm">{error}</p>}
     </section>
   );
 }

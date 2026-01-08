@@ -4,12 +4,18 @@ import { commentSchema, CommentInput } from "../schemas/comment";
 export async function createComment(postId: string, input: CommentInput) {
   const parsed = commentSchema.safeParse(input);
 
-  if (!parsed.success) throw parsed.error;
+  if (!parsed.success) {
+    throw parsed.error; // ZodError tratado no parseFieldErrors
+  }
 
-  const response = await fetcher(`/comment/${postId}`, {
-    method: "POST",
-    body: JSON.stringify(parsed.data),
-  });
+  try {
+    const response = await fetcher(`/comment/${postId}`, {
+      method: "POST",
+      body: JSON.stringify(parsed.data),
+    });
 
-  return response;
+    return response;
+  } catch (error) {
+    throw error; // erro HTTP tratado no parseFieldErrors
+  }
 }

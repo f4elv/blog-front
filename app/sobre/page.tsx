@@ -37,13 +37,16 @@ export default function page() {
         tornar um desenvolvedor, mas não se surpreenda se achar algo muito
         distante disso por aqui, minha cabeça é assim.
       </p>
-      <p>
+      <p className="mb-5">
         Se você leu isso até aqui seja bem vindo, e se sinta sempre a vontade
         para comentar, sua opnião é útil, a não ser que você seja racista,
         homofóbico, preconceituoso, nazista, machista, extremista, e qualquer
         outro adjetivo que pode ser expressado também por filha da puta. Não
         seja um babaca, tudo é mais fácil assim.
       </p>
+      <span className="flex justify-end w-full text-xl text-red-800">
+        Rossin
+      </span>
     </div>
   );
 }
