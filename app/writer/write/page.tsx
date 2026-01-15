@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditorJS from "../../components/tiptap/Editor";
 import { Editor } from "@tiptap/react";
 import { Button } from "@/app/components/Button";
@@ -13,6 +13,14 @@ export default function Page() {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("writerToken");
+    if (!token) {
+      router.push("/writer/login");
+      return;
+    }
+  }, []);
 
   async function handleSave() {
     if (!editor) return;

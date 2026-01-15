@@ -13,6 +13,11 @@ export default function WriterDashboard() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem("writerToken");
+    if (!token) {
+      router.push("/writer/login");
+      return;
+    }
     getPost().then((res) => setPosts(res));
   }, []);
 
