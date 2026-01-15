@@ -7,6 +7,7 @@ import { Button } from "@/app/components/Button";
 import { createPost } from "@/app/lib/api/post";
 import { postSchema } from "@/app/lib/schemas/post";
 import { useRouter } from "next/navigation";
+import { tokenStorage } from "@/app/lib/helpers/token";
 
 export default function Page() {
   const [title, setTitle] = useState("");
@@ -15,7 +16,7 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("writerToken");
+    const token = tokenStorage.get();
     if (!token) {
       router.push("/writer/login");
       return;

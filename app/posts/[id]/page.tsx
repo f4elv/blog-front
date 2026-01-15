@@ -40,7 +40,7 @@ export default function PostPage() {
     blocks.forEach((block) => hljs.highlightElement(block as HTMLElement));
   }, [post]);
 
-  if (!post) return <p>Carregando...</p>;
+  if (!post) return <p className="text-center mt-50">Carregando...</p>;
 
   return (
     <article className="max-w-5xl mx-auto py-10 flex flex-col gap-6">
@@ -68,9 +68,13 @@ export default function PostPage() {
         className="tiptap"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
+      <div className="flex justify-between mt-6">
+        <span className="text-2xl text-red-800">Rossin</span>
+        {new Date(post.createdAt).toLocaleDateString("pt-BR")}
+      </div>
 
       {post.comments.length > 0 && (
-        <section className="mt-10 border-t pt-4">
+        <section className="mt-10 border-t pt-4 px-4 md:px-0">
           <h2 className="text-2xl font-semibold mb-4">Comentários</h2>
           {post.comments.map((comment) => (
             <div key={comment.id} className="mb-4">

@@ -20,9 +20,8 @@ export async function writerLogin(input: { password: string }) {
   });
 
   tokenStorage.set(response.access_token);
-  console.log(response.access_token);
 
-  return response;  
+  return response;
 }
 
 export async function writerLogout() {

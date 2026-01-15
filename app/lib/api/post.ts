@@ -42,3 +42,19 @@ export async function deletePost(id: string) {
 
   return response;
 }
+
+export async function updatePost(id: string, input: unknown) {
+  const parsed = postSchema.safeParse(input);
+
+  if (!parsed.success) {
+    throw parsed.error;
+  }
+
+  const response = await fetcher(`/posts/${id}`, {
+    method: "PATCH",
+    auth: true,
+    body: JSON.stringify(parsed.data),
+  });
+
+  return response;
+}

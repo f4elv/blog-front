@@ -94,11 +94,18 @@ export function CommentSection({ postId, onCommentCreated }: Props) {
   }
 
   return (
-    <section className="mt-12 border-t pt-6 flex flex-col gap-4">
-      <h2 className="text-2xl font-semibold">Comentário</h2>
+    <section className="mt-12 border-t pt-6 flex flex-col gap-4 px-4 md:px-0">
+      <h2 className="text-2xl font-semibold">Deixe seu comentário!!</h2>
+      <span className="text-sm ocupacity-70">
+        Para comentar no meu blog você antes precisa criar uma assinatura,
+        apenas um nome única e uma senha, de forma que você possa ser
+        reconhecido como o autor do seu comentário. Depois ela fica salva e
+        precisa apenas assinar, você cria a assinatura uma vez e reutiliza ela
+        sempre. Se sinta a vontade para deixar sua opinião! E muito obrigado por
+        ler meu blog até aqui :)
+      </span>
 
-      {/* Comentário */}
-      <div>
+      <div> 
         <textarea
           className={`
             w-full border rounded p-3 min-h-32 outline-none transition
